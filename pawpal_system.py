@@ -273,11 +273,13 @@ class DailyPlan:
         """Sort scheduled tasks by their time field (HH:MM)."""
         # Using lambda key with HH:MM will naturally sort lexicographically as time strings
         # e.g. '08:15' < '09:30' < '14:45'.
-        self.scheduled_tasks = sorted(
+        timed = sorted(
             [t for t in self.scheduled_tasks if t.time],
             key=lambda task: task.time,
             reverse=not ascending,
         )
+        untimed = [t for t in self.scheduled_tasks if not t.time]
+        self.scheduled_tasks = timed + untimed
 
     def filter_tasks(self, completed: Optional[bool] = None, pet_name: Optional[str] = None) -> List[Task]:
         """Filter scheduled tasks by completion status and/or pet name in description."""
